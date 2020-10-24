@@ -1,54 +1,24 @@
 <?php
 
+use Symfony\Component\Serializer\Annotation\Groups;
+
 class Contact extends \Phalcon\Mvc\Model
 {
-    /**
-     *
-     * @var integer
-     */
-    public $id;
+    private ?int $id = null;
 
-    /**
-     *
-     * @var string
-     */
-    public $first_name;
+    private string $first_name;
 
-    /**
-     *
-     * @var string
-     */
-    public $last_name;
+    private ?string $last_name = null;
 
-    /**
-     *
-     * @var string
-     */
-    public $phone_number;
+    private string $phone_number;
 
-    /**
-     *
-     * @var string
-     */
-    public $country_code;
+    private ?string $country_code = null;
 
-    /**
-     *
-     * @var string
-     */
-    public $timezone;
+    private ?string $timezone = null;
 
-    /**
-     *
-     * @var string
-     */
-    public $inserted_on;
+    private ?string $inserted_on = null;
 
-    /**
-     *
-     * @var string
-     */
-    public $updated_on;
+    private ?string $updated_on = null;
 
     /**
      * Initialize method for model.
@@ -88,5 +58,109 @@ class Contact extends \Phalcon\Mvc\Model
             $this->inserted_on = $dateTime;
         }
         $this->updated_on = $dateTime;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstName(): string
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * @param string $first_name
+     */
+    public function setFirstName(string $first_name): void
+    {
+        $this->first_name = $first_name;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getLastName(): ?string
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * @param string|null $last_name
+     */
+    public function setLastName(?string $last_name): void
+    {
+        $this->last_name = $last_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPhoneNumber(): string
+    {
+        return $this->phone_number;
+    }
+
+    /**
+     * @param string $phone_number
+     */
+    public function setPhoneNumber(string $phone_number): void
+    {
+        $this->phone_number = $phone_number;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getCountryCode(): ?string
+    {
+        return $this->country_code;
+    }
+
+    /**
+     * @param string|null $country_code
+     */
+    public function setCountryCode(?string $country_code): void
+    {
+        $this->country_code = $country_code;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getTimezone(): ?string
+    {
+        return $this->timezone;
+    }
+
+    /**
+     * @param string|null $timezone
+     */
+    public function setTimezone(?string $timezone): void
+    {
+        $this->timezone = $timezone;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getInsertedOn(): ?string
+    {
+        return $this->inserted_on;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUpdatedOn(): ?string
+    {
+        return $this->updated_on;
     }
 }

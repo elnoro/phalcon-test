@@ -11,6 +11,7 @@ define('APP_PATH', BASE_PATH . '/app');
 try {
     $di = new FactoryDefault();
 
+    include '../vendor/autoload.php';
     include APP_PATH . '/config/router.php';
     include APP_PATH . '/config/services.php';
 

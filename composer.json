@@ -6,6 +6,7 @@
         "codeception/module-phpbrowser": "^1.0.0"
     },
     "require": {
-        "symfony/serializer": "^5.1"
+        "symfony/serializer": "^5.1",
+        "symfony/property-access": "^5.1"
     }
 }

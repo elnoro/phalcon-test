@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
 /**
  * @property Request $request
@@ -15,35 +17,24 @@ class ApiController extends ControllerBase
     {
         if ($contactId) {
             $contact = Contact::findFirst(['id' => $contactId]);
-
-            $this->sendJson([
-                'firstName' => $contact->first_name,
-                'phoneNumber' => $contact->phone_number,
-            ]);
+            $this->sendJson($contact->toArray());
 
             return;
         }
         if (true === $this->request->isPost()) {
-
-            // TODO can probably use getRawJsonBody + object normalizer to make this simpler
-            $requestData = json_decode($this->request->getRawBody(), true);
             $contact = new Contact();
-            $contact->first_name = $requestData['firstName'];
-            $contact->phone_number = $requestData['phoneNumber'];
+            $this->parseRequestInto($contact);
+
             if (!$contact->save()) {
                 $this->sendJson([
                     'error' => 'invalid_contact',
                     'details' => $contact->getMessages(),
                 ]);
-                
+
                 return;
             }
 
-            $responseData = $requestData;
-            // TODO use ObjectNormalizer instead of manual decoding
-            $responseData['id'] = $contact->id;
-
-            $this->sendJson($responseData);
+            $this->sendJson($contact->toArray());
 
             return;
         }
@@ -63,5 +54,21 @@ class ApiController extends ControllerBase
             ->setStatusCode(200, 'OK')
             ->setJsonContent($data)
             ->send();
+    }
+
+    private function parseRequestInto(Contact $contact): void
+    {
+        $objectNormalizer = new ObjectNormalizer();
+        $requestData = $this->request->getJsonRawBody(true);
+
+        // not using assign because not sure how secure it is
+        $objectNormalizer->denormalize(
+            $requestData,
+            Contact::class,
+            null,
+            [
+                AbstractNormalizer::OBJECT_TO_POPULATE => $contact,
+                AbstractNormalizer::ATTRIBUTES => ['firstName', 'lastName', 'phoneNumber', 'countryCode', 'timezone']],
+        );
     }
 }
