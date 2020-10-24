@@ -1,0 +1,172 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "d873b3d361625b6a2618038314d2004b",
+    "packages": [],
+    "packages-dev": [
+        {
+            "name": "phalcon/cli-options-parser",
+            "version": "v1.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/cli-options-parser.git",
+                "reference": "9487c84fb320c6b6882c76d4388d039316d234b9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/cli-options-parser/zipball/9487c84fb320c6b6882c76d4388d039316d234b9",
+                "reference": "9487c84fb320c6b6882c76d4388d039316d234b9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.0 <8.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": ">=5.3 <8.0",
+                "squizlabs/php_codesniffer": "3.*"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.1-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Cop\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalconphp.com",
+                    "homepage": "https://phalconphp.com/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/cli-options-parser/graphs/contributors"
+                }
+            ],
+            "description": "Command line arguments/options parser.",
+            "homepage": "https://phalconphp.com",
+            "keywords": [
+                "argparse",
+                "cli",
+                "command",
+                "command-line",
+                "getopt",
+                "line",
+                "option",
+                "optparse",
+                "parser",
+                "terminal"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-03-14T18:48:08+00:00"
+        },
+        {
+            "name": "phalcon/migrations",
+            "version": "v2.1.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phalcon/migrations.git",
+                "reference": "286988c0ede9f5468576e7c93cfabd85a2887b69"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/phalcon/migrations/zipball/286988c0ede9f5468576e7c93cfabd85a2887b69",
+                "reference": "286988c0ede9f5468576e7c93cfabd85a2887b69",
+                "shasum": ""
+            },
+            "require": {
+                "ext-phalcon": "^4.0.5",
+                "phalcon/cli-options-parser": "^1.2",
+                "php": ">=7.2"
+            },
+            "require-dev": {
+                "codeception/codeception": "^4.1",
+                "codeception/module-asserts": "^1.0.0",
+                "codeception/module-cli": "^1.0",
+                "codeception/module-db": "^1.0",
+                "codeception/module-phpbrowser": "^1.0.0",
+                "ext-pdo": "*",
+                "fzaninotto/faker": "^1.9",
+                "humbug/box": "^3.8",
+                "phalcon/ide-stubs": "^4.0.0",
+                "squizlabs/php_codesniffer": "3.5.1",
+                "vimeo/psalm": "3.6.2",
+                "vlucas/phpdotenv": "^4.1"
+            },
+            "suggest": {
+                "robmorgan/phinx": "Phinx makes it ridiculously easy to manage the database migrations for your PHP app."
+            },
+            "bin": [
+                "phalcon-migrations"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Phalcon\\Migrations\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Phalcon Team",
+                    "email": "team@phalcon.io",
+                    "homepage": "https://phalcon.io/en/team"
+                },
+                {
+                    "name": "Contributors",
+                    "homepage": "https://github.com/phalcon/migrations/graphs/contributors"
+                }
+            ],
+            "description": "Run and Generate DB Migrations with Phalcon Framework",
+            "homepage": "https://phalcon.io",
+            "keywords": [
+                "framework",
+                "migration",
+                "phalcon",
+                "phar"
+            ],
+            "funding": [
+                {
+                    "url": "https://github.com/phalcon",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/phalcon",
+                    "type": "open_collective"
+                }
+            ],
+            "time": "2020-08-31T21:17:27+00:00"
+        }
+    ],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
+}

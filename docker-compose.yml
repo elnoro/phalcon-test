@@ -13,6 +13,9 @@ services:
             - "9000"
         environment:
             - COMPOSER_HOME=/var/www/html/var/composer
+            - MYSQL_DATABASE
+            - MYSQL_USER
+            - MYSQL_PASSWORD
     nginx:
         image: 4xxi/nginx:flex
         depends_on:
