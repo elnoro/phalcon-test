@@ -9,39 +9,19 @@ define('BASE_PATH', dirname(__DIR__));
 define('APP_PATH', BASE_PATH . '/app');
 
 try {
+    $di = new FactoryDefault();
 
+    include APP_PATH . '/config/router.php';
+    include APP_PATH . '/config/services.php';
 
+    $config = $di->getConfig();
 
+    include APP_PATH . '/config/loader.php';
 
-$di = new FactoryDefault();
+    $application = new \Phalcon\Mvc\Application($di);
 
-
-
-
-include APP_PATH . '/config/router.php';
-
-
-
-
-include APP_PATH . '/config/services.php';
-
-
-
-
-$config = $di->getConfig();
-
-
-
-
-include APP_PATH . '/config/loader.php';
-
-
-
-
-$application = new \Phalcon\Mvc\Application($di);
-
-echo $application->handle($_SERVER['REQUEST_URI'])->getContent();
+    echo $application->handle($_SERVER['REQUEST_URI'])->getContent();
 } catch (\Exception $e) {
-echo $e->getMessage() . '<br>';
-echo '<pre>' . $e->getTraceAsString() . '</pre>';
+    echo $e->getMessage() . '<br>';
+    echo '<pre>' . $e->getTraceAsString() . '</pre>';
 }

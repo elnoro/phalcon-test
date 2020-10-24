@@ -1,8 +1,7 @@
 <?php
 
-class Contacts extends \Phalcon\Mvc\Model
+class Contact extends \Phalcon\Mvc\Model
 {
-
     /**
      *
      * @var integer
@@ -64,7 +63,7 @@ class Contacts extends \Phalcon\Mvc\Model
      * Allows to query a set of records that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Contacts[]|Contacts|\Phalcon\Mvc\Model\ResultSetInterface
+     * @return Contact[]|Contact|\Phalcon\Mvc\Model\ResultSetInterface
      */
     public static function find($parameters = null): \Phalcon\Mvc\Model\ResultsetInterface
     {
@@ -75,11 +74,19 @@ class Contacts extends \Phalcon\Mvc\Model
      * Allows to query the first record that match the specified conditions
      *
      * @param mixed $parameters
-     * @return Contacts|\Phalcon\Mvc\Model\ResultInterface
+     * @return Contact|\Phalcon\Mvc\Model\ResultInterface
      */
     public static function findFirst($parameters = null)
     {
         return parent::findFirst($parameters);
     }
 
+    public function beforeValidation()
+    {
+        $dateTime = (new \DateTimeImmutable())->format('Y-m-d H:i:s');
+        if (null === $this->inserted_on) {
+            $this->inserted_on = $dateTime;
+        }
+        $this->updated_on = $dateTime;
+    }
 }

@@ -20,7 +20,7 @@ class ContactsController extends ControllerBase
         $parameters = Criteria::fromInput($this->di, 'Contacts', $_GET)->getParams();
         $parameters['order'] = "id";
 
-        $contacts = Contacts::find($parameters);
+        $contacts = Contact::find($parameters);
         if (count($contacts) == 0) {
             $this->flash->notice("The search did not find any contacts");
 
@@ -51,7 +51,7 @@ class ContactsController extends ControllerBase
     public function editAction($id)
     {
         if (!$this->request->isPost()) {
-            $contact = Contacts::findFirstByid($id);
+            $contact = Contact::findFirstByid($id);
             if (!$contact) {
                 $this->flash->error("contact was not found");
 
@@ -89,7 +89,7 @@ class ContactsController extends ControllerBase
             return;
         }
 
-        $contact = new Contacts();
+        $contact = new Contact();
         $contact->firstName = $this->request->getPost("first_name", "int");
         $contact->lastName = $this->request->getPost("last_name", "int");
         $contact->phoneNumber = $this->request->getPost("phone_number", "int");
@@ -134,7 +134,7 @@ class ContactsController extends ControllerBase
         }
 
         $id = $this->request->getPost("id");
-        $contact = Contacts::findFirstByid($id);
+        $contact = Contact::findFirstByid($id);
 
         if (!$contact) {
             $this->flash->error("contact does not exist " . $id);
@@ -182,7 +182,7 @@ class ContactsController extends ControllerBase
 
     public function deleteAction($id)
     {
-        $contact = Contacts::findFirstByid($id);
+        $contact = Contact::findFirstByid($id);
         if (!$contact) {
             $this->flash->error("contact was not found");
 

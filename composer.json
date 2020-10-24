@@ -1,5 +1,11 @@
 {
     "require-dev": {
-        "phalcon/migrations": "^2.1"
+        "phalcon/migrations": "^2.1",
+        "codeception/codeception": "^4.1",
+        "codeception/module-rest": "^1.0.0",
+        "codeception/module-phpbrowser": "^1.0.0"
+    },
+    "require": {
+        "symfony/serializer": "^5.1"
     }
 }
