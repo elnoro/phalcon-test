@@ -1,7 +1,10 @@
 <?php
 declare(strict_types=1);
 
+use App\DataProviders\Hostaway\CachingClient;
 use App\DataProviders\Hostaway\HttpClient;
+use Phalcon\Cache\AdapterFactory;
+use Phalcon\Cache\CacheFactory;
 use Phalcon\Escaper;
 use Phalcon\Flash\Direct as Flash;
 use Phalcon\Mvc\Model\Metadata\Memory as MetaDataAdapter;
@@ -10,9 +13,8 @@ use Phalcon\Mvc\View\Engine\Php as PhpEngine;
 use Phalcon\Mvc\View\Engine\Volt as VoltEngine;
 use Phalcon\Session\Adapter\Stream as SessionAdapter;
 use Phalcon\Session\Manager as SessionManager;
+use Phalcon\Storage\SerializerFactory;
 use Phalcon\Url as UrlResolver;
-use Tests\Unit\dataproviders\HttpClientTest;
-
 
 $di->setShared('config', function () {
     return include APP_PATH . "/config/config.php";
@@ -111,5 +113,16 @@ $di->setShared('session', function () {
 $di->setShared('hostawayClient', function () {
     $config = $this->getConfig();
 
-    return HttpClient::createFromSettings($config->hostaway->apiUrl);
+    $httpClient = HttpClient::createFromSettings($config->hostaway->apiUrl);
+
+    $options = [
+        'defaultSerializer' => 'Json',
+        'lifetime' => 7200,
+    ];
+    $serializerFactory = new SerializerFactory();
+    $adapterFactory = new AdapterFactory($serializerFactory, $options);
+    $cacheFactory = new CacheFactory($adapterFactory);
+    $cache = $cacheFactory->newInstance('stream', ['storageDir' => sys_get_temp_dir() . '/cache']);
+
+    return new CachingClient($httpClient, $cache);
 });

@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Unit\dataproviders;
+namespace Tests\Unit\dataproviders\Hostaway;
 
 use App\DataProviders\Hostaway\HttpClient;
 use GuzzleHttp\Client;
