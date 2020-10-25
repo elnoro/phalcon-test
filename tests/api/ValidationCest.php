@@ -29,6 +29,27 @@ class ValidationCest
         ];
     }
 
+    protected function countryCodesValidation(): array
+    {
+        return [
+            ['countryCode' => 'AF', 'expectedHttpCode' => 200],
+            ['countryCode' => 'US', 'expectedHttpCode' => 200],
+            ['countryCode' => '', 'expectedHttpCode' => 400],
+            ['countryCode' => 'invalid', 'expectedHttpCode' => 400],
+            ['countryCode' => '不気味', 'expectedHttpCode' => 400],
+        ];
+    }
+
+    protected function timezonesValidation(): array
+    {
+        return [
+            ['timezone' => 'Antarctica/Casey', 'expectedHttpCode' => 200],
+            ['timezone' => 'Asia/Aqtobe', 'expectedHttpCode' => 200],
+            ['timezone' => '', 'expectedHttpCode' => 400],
+            ['timezone' => 'invalid', 'expectedHttpCode' => 400],
+            ['timezone' => '不気味', 'expectedHttpCode' => 400],
+        ];
+    }
 
     /**
      * @dataProvider incompleteData
@@ -55,5 +76,34 @@ class ValidationCest
         $I->tryUpdatingContactFromData($contactId, ['phoneNumber' => $example['phoneNumber']]);
 
         $I->seeResponseCodeIs(400);
+    }
+
+    /**
+     * @dataProvider countryCodesValidation
+     *
+     * @param ApiTester $I
+     * @param Example $example
+     */
+    public function validatesCountryCodes(ApiTester $I, Example $example)
+    {
+        $contactId = $I->createContact();
+        $I->tryUpdatingContactFromData($contactId, ['countryCode' => $example['countryCode']]);
+
+        $I->seeResponseCodeIs($example['expectedHttpCode']);
+    }
+
+
+    /**
+     * @dataProvider timezonesValidation
+     *
+     * @param ApiTester $I
+     * @param Example $example
+     */
+    public function validatesTimezones(ApiTester $I, Example $example)
+    {
+        $contactId = $I->createContact();
+        $I->tryUpdatingContactFromData($contactId, ['timezone' => $example['timezone']]);
+
+        $I->seeResponseCodeIs($example['expectedHttpCode']);
     }
 }

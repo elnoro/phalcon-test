@@ -23,4 +23,7 @@ return new \Phalcon\Config([
         'cacheDir' => BASE_PATH . '/cache/',
         'baseUri' => '/',
     ],
+    'hostaway' => [
+        'apiUrl' => 'https://api.hostaway.com',
+    ],
 ]);
