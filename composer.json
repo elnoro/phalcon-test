@@ -3,9 +3,10 @@
         "phalcon/migrations": "^2.1",
         "codeception/codeception": "^4.1",
         "codeception/module-rest": "^1.0.0",
-        "codeception/module-phpbrowser": "^1.0.0"
+        "codeception/module-phpbrowser": "^1.0.0",
     },
     "require": {
+        "ext-json": "*",
         "symfony/serializer": "^5.1",
         "symfony/property-access": "^5.1"
     }

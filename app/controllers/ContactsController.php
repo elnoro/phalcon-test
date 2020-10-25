@@ -1,218 +1,119 @@
 <?php
 declare(strict_types=1);
 
+use Phalcon\Http\Request;
+use Phalcon\Http\Response;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 
-use Phalcon\Mvc\Model\Criteria;
-use Phalcon\Paginator\Adapter\Model as Paginator;
-
-
+/**
+ * @property Request $request
+ * @property Response $response
+ */
 class ContactsController extends ControllerBase
 {
-    public function indexAction()
+    public function createAction(): void
     {
-
-    }
-
-
-    public function searchAction()
-    {
-        $numberPage = $this->request->getQuery('page', 'int', 1);
-        $parameters = Criteria::fromInput($this->di, 'Contacts', $_GET)->getParams();
-        $parameters['order'] = "id";
-
-        $contacts = Contact::find($parameters);
-        if (count($contacts) == 0) {
-            $this->flash->notice("The search did not find any contacts");
-
-            $this->dispatcher->forward([
-                "controller" => "contacts",
-                "action" => "index",
-            ]);
-
-            return;
-        }
-
-        $paginator = new Paginator([
-            'data' => $contacts,
-            'limit' => 10,
-            'page' => $numberPage,
-        ]);
-
-        $this->view->page = $paginator->getPaginate();
-    }
-
-
-    public function newAction()
-    {
-
-    }
-
-
-    public function editAction($id)
-    {
-        if (!$this->request->isPost()) {
-            $contact = Contact::findFirstByid($id);
-            if (!$contact) {
-                $this->flash->error("contact was not found");
-
-                $this->dispatcher->forward([
-                    'controller' => "contacts",
-                    'action' => 'index',
-                ]);
-
-                return;
-            }
-
-            $this->view->id = $contact->id;
-
-            $this->tag->setDefault("id", $contact->id);
-            $this->tag->setDefault("first_name", $contact->first_name);
-            $this->tag->setDefault("last_name", $contact->last_name);
-            $this->tag->setDefault("phone_number", $contact->phone_number);
-            $this->tag->setDefault("country_code", $contact->country_code);
-            $this->tag->setDefault("timezone", $contact->timezone);
-            $this->tag->setDefault("inserted_on", $contact->inserted_on);
-            $this->tag->setDefault("updated_on", $contact->updated_on);
-
-        }
-    }
-
-
-    public function createAction()
-    {
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'index',
-            ]);
-
-            return;
-        }
-
         $contact = new Contact();
-        $contact->firstName = $this->request->getPost("first_name", "int");
-        $contact->lastName = $this->request->getPost("last_name", "int");
-        $contact->phoneNumber = $this->request->getPost("phone_number", "int");
-        $contact->countryCode = $this->request->getPost("country_code", "int");
-        $contact->timezone = $this->request->getPost("timezone", "int");
-        $contact->insertedOn = $this->request->getPost("inserted_on", "int");
-        $contact->updatedOn = $this->request->getPost("updated_on", "int");
-
+        $this->parseRequestInto($contact);
 
         if (!$contact->save()) {
-            foreach ($contact->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'new',
+            $this->sendJson([
+                'error' => 'invalid_contact',
+                'details' => $contact->getMessages(),
             ]);
 
             return;
         }
 
-        $this->flash->success("contact was created successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "contacts",
-            'action' => 'index',
-        ]);
+        $this->sendJson($contact->toArray());
     }
 
-
-    public function saveAction()
+    public function updateAction(int $contactId): void
     {
-
-        if (!$this->request->isPost()) {
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'index',
-            ]);
-
+        $contact = $this->findContact($contactId);
+        if (null === $contact) {
             return;
         }
 
-        $id = $this->request->getPost("id");
-        $contact = Contact::findFirstByid($id);
-
-        if (!$contact) {
-            $this->flash->error("contact does not exist " . $id);
-
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'index',
-            ]);
-
-            return;
-        }
-
-        $contact->firstName = $this->request->getPost("first_name", "int");
-        $contact->lastName = $this->request->getPost("last_name", "int");
-        $contact->phoneNumber = $this->request->getPost("phone_number", "int");
-        $contact->countryCode = $this->request->getPost("country_code", "int");
-        $contact->timezone = $this->request->getPost("timezone", "int");
-        $contact->insertedOn = $this->request->getPost("inserted_on", "int");
-        $contact->updatedOn = $this->request->getPost("updated_on", "int");
-
+        $this->parseRequestInto($contact);
 
         if (!$contact->save()) {
-
-            foreach ($contact->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'edit',
-                'params' => [$contact->id],
+            $this->sendJson([
+                'error' => 'invalid_contact',
+                'details' => $contact->getMessages(),
             ]);
 
             return;
         }
 
-        $this->flash->success("contact was updated successfully");
-
-        $this->dispatcher->forward([
-            'controller' => "contacts",
-            'action' => 'index',
-        ]);
+        $this->sendJson($contact->toArray());
     }
 
-
-    public function deleteAction($id)
+    public function getAction(int $contactId): void
     {
-        $contact = Contact::findFirstByid($id);
-        if (!$contact) {
-            $this->flash->error("contact was not found");
-
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'index',
-            ]);
-
+        $contact = $this->findContact($contactId);
+        if (null === $contact) {
             return;
         }
 
-        if (!$contact->delete()) {
+        $this->sendJson($contact->toArray());
+    }
 
-            foreach ($contact->getMessages() as $message) {
-                $this->flash->error($message);
-            }
-
-            $this->dispatcher->forward([
-                'controller' => "contacts",
-                'action' => 'search',
-            ]);
-
+    public function deleteAction(int $contactId): void
+    {
+        $contact = $this->findContact($contactId);
+        if (null === $contact) {
             return;
         }
+        $contact->delete();
 
-        $this->flash->success("contact was deleted successfully");
+        $this
+            ->response
+            ->setStatusCode(204)
+            ->send();
+    }
 
-        $this->dispatcher->forward([
-            'controller' => "contacts",
-            'action' => "index",
-        ]);
+    public function listAction(): void
+    {
+        $this->sendJson(Contact::find()->toArray());
+    }
+
+    private function sendJson(array $data): void
+    {
+        $this
+            ->response
+            ->setStatusCode(200, 'OK')
+            ->setJsonContent($data)
+            ->send();
+    }
+
+    private function parseRequestInto(Contact $contact): void
+    {
+        $objectNormalizer = new ObjectNormalizer();
+        $requestData = $this->request->getJsonRawBody(true);
+
+        // not using assign because not sure how secure it is
+        $objectNormalizer->denormalize(
+            $requestData,
+            Contact::class,
+            null,
+            [
+                AbstractNormalizer::OBJECT_TO_POPULATE => $contact,
+                AbstractNormalizer::ATTRIBUTES => ['firstName', 'lastName', 'phoneNumber', 'countryCode', 'timezone']],
+        );
+    }
+
+    private function findContact(int $contactId): ?Contact
+    {
+        $contact = Contact::findFirst($contactId) ?? null;
+        if (null === $contact) {
+            $this
+                ->response
+                ->setStatusCode(404)
+                ->send();
+        }
+
+        return $contact;
     }
 }

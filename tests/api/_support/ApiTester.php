@@ -23,4 +23,31 @@ class ApiTester extends \Codeception\Actor
     /**
      * Define custom actions here
      */
+    public function tryListingContacts(): void
+    {
+        $this->sendGet('/contacts');
+    }
+
+    public function tryAccessingContact(int $id): void
+    {
+        $this->sendGET(sprintf('/contacts/%d', $id));
+    }
+
+    public function createContactFromData(array $data): int
+    {
+        $this->sendPOST('/contacts', json_encode($data));
+
+        $this->seeResponseCodeIsSuccessful();
+        $this->seeResponseJsonMatchesJsonPath('$.id');
+
+        return $this->grabDataFromResponseByJsonPath('$.id')[0];
+    }
+
+    public function createContact(): int
+    {
+        return $this->createContactFromData([
+            'firstName' => 'Example',
+            'phoneNumber' => '+1'.time(),
+        ]);
+    }
 }
