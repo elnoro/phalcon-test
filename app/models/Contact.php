@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\DataProviders\Hostaway\HostawayClientInterface;
+use App\Validators\CountryCodeValidator;
+use App\Validators\TimezoneValidator;
 use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Regex;
@@ -43,53 +45,8 @@ class Contact extends \Phalcon\Mvc\Model
             'phoneNumber',
             new Regex(['message' => 'The phone number is required', 'pattern' => '/^\+\d{5,20}$/'])
         );
-
-        // TODO move to separate validators
-        $validator->add(
-            'countryCode',
-            new Callback([
-                'callback' => function ($data) {
-                    $submittedCountryCode = $data->getCountryCode();
-                    if (null === $submittedCountryCode) {
-                        return true;
-                    }
-
-                    /** @var HostawayClientInterface $hostaway */
-                    $hostaway = $this->getDI()->get('hostawayClient');
-
-                    foreach ($hostaway->getCountryCodes() as $countryCode) {
-                        if ($submittedCountryCode === $countryCode) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            ])
-        );
-
-        $validator->add(
-            'timezone',
-            new Callback([
-                'callback' => function ($data) {
-                    $submittedTimezone = $data->getTimezone();
-                    if (null === $submittedTimezone) {
-                        return true;
-                    }
-
-                    /** @var HostawayClientInterface $hostaway */
-                    $hostaway = $this->getDI()->get('hostawayClient');
-
-                    foreach ($hostaway->getTimezones() as $timezone) {
-                        if ($submittedTimezone === $timezone) {
-                            return true;
-                        }
-                    }
-
-                    return false;
-                }
-            ])
-        );
+        $validator->add( 'countryCode',new CountryCodeValidator());
+        $validator->add('timezone', new TimezoneValidator());
 
         return $this->validate($validator);
     }

@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\DataProviders\Hostaway\CachingClient;
+use App\DataProviders\Hostaway\ExistenceChecker;
 use App\DataProviders\Hostaway\HttpClient;
 use App\DataProviders\Hostaway\LoggingClient;
 use Phalcon\Cache\AdapterFactory;
@@ -147,9 +148,13 @@ $di->setShared('hostaway_client.cache', function () {
     return new CachingClient($httpClient, $cache);
 });
 
-$di->setShared('hostawayClient', function () {
+$di->setShared('hostaway_client', function () {
     $httpClient = $this->get('hostaway_client.cache');
     $logger = $this->get('logger');
 
     return new LoggingClient($httpClient, $logger);
+});
+
+$di->setShared('hostaway_existence_checker', function () {
+    return new ExistenceChecker($this->get('hostaway_client'));
 });
