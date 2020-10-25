@@ -8,6 +8,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Tests\Unit\AbstractUnitTest;
 
 final class HttpClientTest extends AbstractUnitTest
@@ -19,7 +20,7 @@ final class HttpClientTest extends AbstractUnitTest
      */
     public function canInstantiateItself(): void
     {
-        $result = HttpClient::createFromSettings('test');
+        $result = HttpClient::createFromSettings('test', $this->createMock(LoggerInterface::class));
 
         $this->assertInstanceOf(HttpClient::class, $result);
     }

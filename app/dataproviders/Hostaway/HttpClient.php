@@ -4,7 +4,12 @@ declare(strict_types=1);
 namespace App\DataProviders\Hostaway;
 
 use GuzzleHttp\Client;
-use Psr\Http\Client\ClientInterface;
+use GuzzleHttp\HandlerStack;
+use GuzzleHttp\MessageFormatter;
+use GuzzleHttp\Middleware;
+use GuzzleHttp\Utils;
+use Phalcon\Logger;
+use Psr\Log\LoggerInterface;
 
 final class HttpClient implements HostawayClientInterface
 {
@@ -15,10 +20,21 @@ final class HttpClient implements HostawayClientInterface
         $this->guzzle = $guzzle;
     }
 
-    public static function createFromSettings(string $apiUrl): self
+    public static function createFromSettings(string $apiUrl, LoggerInterface $logger): self
     {
+        $loggingMiddleware = Middleware::log(
+            $logger,
+            new MessageFormatter(MessageFormatter::SHORT),
+            (string)Logger::INFO,
+        );
+
+        $handler = new HandlerStack();
+        $handler->setHandler(Utils::chooseHandler());
+        $handler->push($loggingMiddleware);
+
         $guzzle = new Client([
             'base_uri' => $apiUrl,
+            'handler' => $handler,
         ]);
 
         return new self($guzzle);
