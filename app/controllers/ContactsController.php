@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 
+use App\Models\Contact;
 use Phalcon\Http\Request;
 use Phalcon\Http\Response;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;

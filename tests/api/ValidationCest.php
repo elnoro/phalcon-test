@@ -25,7 +25,7 @@ class ValidationCest
             ['phoneNumber' => 'not a number'],
             ['phoneNumber' => '1'],
             ['phoneNumber' => '11111111'],
-            ['phoneNumber' => '+'.str_repeat('2', 20)],
+            ['phoneNumber' => '+'.str_repeat('2', 30)],
         ];
     }
 

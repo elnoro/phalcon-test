@@ -1,5 +1,9 @@
 <?php
 
+namespace App\Models;
+
+use Phalcon\Validation;
+use Phalcon\Validation\Validator\Regex;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 class Contact extends \Phalcon\Mvc\Model
@@ -27,6 +31,18 @@ class Contact extends \Phalcon\Mvc\Model
     {
         $this->setSchema("phonebook");
         $this->setSource("contacts");
+    }
+
+    public function validation()
+    {
+        $validator = new Validation();
+
+        $validator->add(
+            'phoneNumber',
+            new Regex(['message' => 'The phone number is required', 'pattern' => '/^\+\d{5,20}$/'])
+        );
+
+        return $this->validate($validator);
     }
 
     /**
