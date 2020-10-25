@@ -21,22 +21,4 @@ final class ContactTest extends AbstractUnitTest
        $this->assertNotNull($contact->getInsertedOn());
        $this->assertNotNull($contact->getUpdatedOn());
     }
-
-    /**
-     * @test
-     */
-    public function validatesPhoneNumbers(): void
-    {
-        $contact = new Contact();
-        $contact->setFirstName('Test');
-        $contact->setPhoneNumber('+1999999');
-
-        $contact->validation();
-
-        $this->assertTrue($contact->validation());
-
-        $contact->setPhoneNumber('invalid');
-
-        $this->assertFalse($contact->validation());
-    }
 }

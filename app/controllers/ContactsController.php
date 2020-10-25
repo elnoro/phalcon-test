@@ -74,7 +74,17 @@ class ContactsController extends ControllerBase
 
     public function listAction(): void
     {
-        $this->sendJson(Contact::find()->toArray());
+        if ($namePart = $this->request->get('name')) {
+            $foundContacts = Contact::query()
+                ->where("CONCAT(first_name, ' ', last_name) LIKE :name:")
+                ->bind(['name' => '%'.$namePart.'%'])
+                ->execute();
+            ;
+            
+        }
+        $foundContacts = $foundContacts ?? Contact::find();
+
+        $this->sendJson($foundContacts->toArray());
     }
 
     private function parseRequestInto(Contact $contact): void

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\DataProviders\Hostaway\HostawayClientInterface;
+use Phalcon\Mvc\Model\ResultsetInterface;
 use Phalcon\Validation;
 use Phalcon\Validation\Validator\Regex;
 use Phalcon\Validation\Validator\Callback;
@@ -43,6 +44,7 @@ class Contact extends \Phalcon\Mvc\Model
             new Regex(['message' => 'The phone number is required', 'pattern' => '/^\+\d{5,20}$/'])
         );
 
+        // TODO move to separate validators
         $validator->add(
             'countryCode',
             new Callback([
@@ -121,6 +123,21 @@ class Contact extends \Phalcon\Mvc\Model
             $this->inserted_on = $dateTime;
         }
         $this->updated_on = $dateTime;
+    }
+
+    /**
+     * FIXME Trigrams could be used to speed up the query
+     * @see https://www.percona.com/blog/2018/03/19/speed-pattern-matching-queries/
+     *
+     * @param string $nameSubstring
+     * @return ResultsetInterface
+     */
+    public function findByNameSubstring(string $nameSubstring): ResultsetInterface
+    {
+        return Contact::query()
+            ->where("CONCAT(first_name, ' ', last_name) LIKE :name:")
+            ->bind(['name' => '%'.$nameSubstring.'%'])
+            ->execute();
     }
 
     /**
