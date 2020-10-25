@@ -68,24 +68,12 @@ class ContactsController extends ControllerBase
         }
         $contact->delete();
 
-        $this
-            ->response
-            ->setStatusCode(204)
-            ->send();
+        $this->noContent();
     }
 
     public function listAction(): void
     {
         $this->sendJson(Contact::find()->toArray());
-    }
-
-    private function sendJson(array $data): void
-    {
-        $this
-            ->response
-            ->setStatusCode(200, 'OK')
-            ->setJsonContent($data)
-            ->send();
     }
 
     private function parseRequestInto(Contact $contact): void
@@ -108,10 +96,7 @@ class ContactsController extends ControllerBase
     {
         $contact = Contact::findFirst($contactId) ?? null;
         if (null === $contact) {
-            $this
-                ->response
-                ->setStatusCode(404)
-                ->send();
+            $this->notFound();
         }
 
         return $contact;
