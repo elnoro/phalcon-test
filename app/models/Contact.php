@@ -6,11 +6,11 @@ class Contact extends \Phalcon\Mvc\Model
 {
     private ?int $id = null;
 
-    private string $first_name;
+    private string $first_name = '';
 
     private ?string $last_name = null;
 
-    private string $phone_number;
+    private string $phone_number = '';
 
     private ?string $country_code = null;
 

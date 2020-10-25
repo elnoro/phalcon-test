@@ -5,11 +5,11 @@ use Phalcon\Mvc\Controller;
 
 class ControllerBase extends Controller
 {
-    final protected function sendJson(array $data): void
+    final protected function sendJson(array $data, int $code = 200): void
     {
         $this
             ->response
-            ->setStatusCode(200)
+            ->setStatusCode($code)
             ->setJsonContent($data)
             ->send();
     }

@@ -21,7 +21,7 @@ class ContactsController extends ControllerBase
             $this->sendJson([
                 'error' => 'invalid_contact',
                 'details' => $contact->getMessages(),
-            ]);
+            ], 400);
 
             return;
         }
@@ -42,7 +42,7 @@ class ContactsController extends ControllerBase
             $this->sendJson([
                 'error' => 'invalid_contact',
                 'details' => $contact->getMessages(),
-            ]);
+            ], 400);
 
             return;
         }

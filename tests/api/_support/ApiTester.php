@@ -33,9 +33,19 @@ class ApiTester extends \Codeception\Actor
         $this->sendGET(sprintf('/contacts/%d', $id));
     }
 
-    public function createContactFromData(array $data): int
+    public function tryCreatingContactFromData(array $data): void
     {
         $this->sendPOST('/contacts', json_encode($data));
+    }
+
+    public function tryUpdatingContactFromData(int $contactId, array $data)
+    {
+        $this->sendPUT(sprintf('/contacts/%d', $contactId), json_encode($data));
+    }
+
+    public function createContactFromData(array $data): int
+    {
+        $this->tryCreatingContactFromData($data);
 
         $this->seeResponseCodeIsSuccessful();
         $this->seeResponseJsonMatchesJsonPath('$.id');

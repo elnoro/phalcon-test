@@ -2,10 +2,10 @@
 
 class ApiCest
 {
-    private const EXPECTED_US_NUMBER = '+19991234567';
+    public const EXPECTED_US_NUMBER = '+19991234567';
 
-    const EXPECTED_FIRST_NAME = 'expected_first_name';
-    const EXPECTED_UK_NUMBER = '+44999123456';
+    public const EXPECTED_FIRST_NAME = 'expected_first_name';
+    public const EXPECTED_UK_NUMBER = '+44999123456';
 
     public function tryListingContacts(ApiTester $I): void
     {
@@ -37,14 +37,14 @@ class ApiCest
     public function tryUpdatingContact(ApiTester $I): void
     {
         $contactId = $I->createContact();
-
-        $I->sendPUT(sprintf('/contacts/%d', $contactId), json_encode([
+        $updatedData = [
             'firstName' => 'new_first_name',
             'lastName' => 'expected_last_name',
             'phoneNumber' => self::EXPECTED_UK_NUMBER,
             'country_code' => 'US',
             'timezone' => 'UTC',
-        ]));
+        ];
+        $I->tryUpdatingContactFromData($contactId, $updatedData);
 
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseContains('expected_last_name');
