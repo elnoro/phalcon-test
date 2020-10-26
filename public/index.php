@@ -23,6 +23,10 @@ try {
 
     echo $application->handle($_SERVER['REQUEST_URI'])->getContent();
 } catch (\Exception $e) {
-    echo $e->getMessage() . '<br>';
-    echo '<pre>' . $e->getTraceAsString() . '</pre>';
+    http_response_code(500);
+
+    echo json_encode([
+        'message' => $e->getMessage(),
+        'trace' => $e->getTraceAsString(),
+    ]);
 }
