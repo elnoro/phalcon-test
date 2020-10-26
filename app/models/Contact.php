@@ -89,7 +89,7 @@ class Contact extends \Phalcon\Mvc\Model
      * @param string $nameSubstring
      * @return ResultsetInterface
      */
-    public function findByNameSubstring(string $nameSubstring): ResultsetInterface
+    public static function findByNameSubstring(string $nameSubstring): ResultsetInterface
     {
         return Contact::query()
             ->where("CONCAT(first_name, ' ', last_name) LIKE :name:")
