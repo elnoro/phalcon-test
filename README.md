@@ -3,7 +3,8 @@
 This is a very simple REST API for a "phonebook". 
 You can create, update and delete contacts. 
 You cannot create a contact with a nonexistent timezone or country code.
-Phone numbers must start with a "+" and have no more than 20 digits (e.g. +123456 is fine).
+Phone numbers must start with a "+" and have no more than 20 digits (e.g. +123456 is fine). 
+You can save multiple contacts with the same phone number.
 
 ### Launching the app
 
@@ -14,8 +15,9 @@ $ docker-compose exec php /bin/sh
 # vendor/bin/phalcon-migrations run
 ```
 
-You should be able to access the app on http://localhost/api/contacts
+You should be able to access the app on http://localhost/api/contacts.
 
+Try to run some queries from `examples/crud.http` or run tests!
 
 ### Running tests
 

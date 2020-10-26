@@ -1,0 +1,26 @@
+### Create a contact
+POST http://localhost/api/contacts
+Content-Type: application/json
+
+{
+  "firstName": "Joanna",
+  "lastName": "Smith",
+  "phoneNumber": "+123456",
+  "timezone": "Europe/Moscow",
+  "countryCode": "RU"
+}
+
+### Update timezone (the data will be loaded from cache)
+PUT http://localhost/api/contacts/1
+Content-Type: application/json
+
+{
+  "countryCode": "ES",
+  "timezone": "Europe/Madrid"
+}
+
+### Find a contact by name
+GET http://localhost/api/contacts?name=Joa
+
+### Access by id
+GET http://localhost/api/contacts/1
